@@ -4,6 +4,14 @@ const db = require('../data/helpers/userDb');
 
 const router = express.Router();
 
+function uppercaseName(req, res, next) {
+  if (req.body.hasOwnProperty('name')) {
+    req.body.name = req.body.name.toUpperCase();
+  }
+  next();
+}
+router.use(uppercaseName);
+
 router.get('/', async (req, res) => {
   try {
     const users = await db.get();
