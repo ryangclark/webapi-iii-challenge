@@ -37,12 +37,17 @@ router.get('/:id', async (req, res) => {
 router.get('/:id/posts', async (req, res) => {
   try {
     const posts = await db.getUserPosts(req.params.id);
-    if (!posts) {
-      // TODO: need to test if this method differentiates between
-      // `no posts for user` and `user not found`
-      res
-        .status(404)
-        .json({ message: `User with ID ${req.params.id} not found.` });
+    if (!posts.length) {
+      // If `posts` is an empty list,
+      // check if `req.params.id` is actually a user
+      const user = await db.getById(req.params.id);
+      if (!user) {
+        res
+          .status(404)
+          .json({ message: `User with ID ${req.params.id} not found.` });
+      } else {
+        res.status(200).json(posts);
+      }
     } else {
       res.status(200).json(posts);
     }

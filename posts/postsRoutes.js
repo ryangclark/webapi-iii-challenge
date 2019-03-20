@@ -77,10 +77,10 @@ router.delete('/:id', async (req, res) => {
 });
 
 router.put('/:id', async (req, res) => {
-  if (!req.body.hasOwnProperty('text') || !req.body.hasOwnProperty('post_id')) {
+  if (!req.body.hasOwnProperty('text')) {
     return res
       .status(400)
-      .json({ message: 'Please provide `post_id` and `text` properties.' });
+      .json({ message: 'Please provide a `text` property.' });
   }
   try {
     const post = await db.update(req.params.id, req.body);
